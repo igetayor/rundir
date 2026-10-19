@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: rundir-postgres
+    restart: always
+    environment:
+      POSTGRES_DB: rundir_db
+      POSTGRES_USER: rundir_user
+      POSTGRES_PASSWORD: rundir_password
+    ports:
+      - "5436:5432"
+    volumes:
+      - rundir_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U rundir_user -d rundir_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  pipeline:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: rundir-pipeline
+    restart: always
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8086:8086"
+    environment:
+      - PORT=8086
+      - ENVIRONMENT=production
+      - LOG_LEVEL=INFO
+      - DATABASE_URL=postgresql+asyncpg://rundir_user:rundir_password@postgres:5432/rundir_db
+      - MAX_CONCURRENT_STREAMS=12
+      - BATCH_INSERT_CHUNK_SIZE=500
+      - REQUEST_TIMEOUT_SECONDS=15
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8086/healthz"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  rundir_pgdata:
