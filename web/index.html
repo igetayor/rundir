@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
   <style>
     :root {
       --bg-dark: #060913;
@@ -461,7 +462,7 @@
       <a href="#dispatch" class="nav-link active">Pipeline Dispatch</a>
       <a href="#records" class="nav-link">Records Feed</a>
       <a href="#dlq" class="nav-link">DLQ Quarantine</a>
-      <a href="/docs" target="_blank" class="nav-link">OpenAPI Swagger ↗</a>
+      <a href="/docs" target="_blank" class="nav-link">OpenAPI Swagger â†—</a>
       <div class="system-badge">
         <span class="pulse-dot"></span>
         <span id="system-status-text">Pipeline Active :8086</span>
@@ -596,6 +597,8 @@
   </div>
 
   <script>
+    const API_BASE = window.location.protocol === 'file:' ? 'http://localhost:8086' : '';
+
     async function dispatchIngestion(e) {
       e.preventDefault();
       const count = parseInt(document.getElementById('job-synthetic').value);
@@ -612,7 +615,7 @@
       };
 
       try {
-        const res = await fetch('/api/v1/ingest', {
+        const res = await fetch(`${API_BASE}/api/v1/ingest`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
@@ -636,7 +639,7 @@
 
     async function fetchStats() {
       try {
-        const res = await fetch('/api/v1/stats');
+        const res = await fetch(`${API_BASE}/api/v1/stats`);
         if (!res.ok) return;
         const stats = await res.json();
         document.getElementById('stat-inserted').textContent = stats.total_records_inserted.toLocaleString();
@@ -649,7 +652,7 @@
 
     async function fetchRecords() {
       try {
-        const res = await fetch('/api/v1/records?limit=10');
+        const res = await fetch(`${API_BASE}/api/v1/records?limit=10`);
         if (!res.ok) return;
         const records = await res.json();
         const list = document.getElementById('records-feed');
@@ -666,7 +669,7 @@
         `).join('');
 
         // Fetch DLQ
-        const dlqRes = await fetch('/api/v1/quarantine?limit=5');
+        const dlqRes = await fetch(`${API_BASE}/api/v1/quarantine?limit=5`);
         if (dlqRes.ok) {
           const dlq = await dlqRes.json();
           document.getElementById('dlq-badge').textContent = `${dlq.length} ISOLATED`;
@@ -690,3 +693,4 @@
   </script>
 </body>
 </html>
+
