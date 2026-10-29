@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
 
-from app.api.router import router as api_router
+from app.api.controllers.ingestion_controller import router as ingestion_router
 from app.config import get_settings
 from app.database import init_db
 from app.logger import logger
@@ -39,7 +39,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(api_router)
+app.include_router(ingestion_router)
 
 web_dir = Path(__file__).resolve().parent.parent / "web"
 if web_dir.exists():

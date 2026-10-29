@@ -1,54 +1,32 @@
-﻿:root {
-      --bg-dark: #060913;
-      --bg-card: #0c1222;
-      --bg-surface: #10192e;
-      --border-subtle: #1e2c4a;
-      --border-accent: #2e4370;
-      --primary: #f59e0b;
-      --primary-glow: rgba(245, 158, 11, 0.25);
-      --secondary: #06b6d4;
-      --secondary-glow: rgba(6, 182, 212, 0.25);
-      --accent: #10b981;
-      --danger: #ef4444;
-      --text-main: #f8fafc;
-      --text-muted: #94a3b8;
-      --text-dim: #64748b;
-      --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-      --font-mono: 'JetBrains Mono', monospace;
-    }
+:root {
+  --bg-dark: #080a10;
+  --bg-card: #0e121d;
+  --bg-surface: #121724;
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-accent: rgba(255, 255, 255, 0.15);
+  --primary: #f59e0b;
+  --primary-glow: rgba(245, 158, 11, 0.15);
+  --secondary: #0284c7;
+  --secondary-glow: rgba(2, 132, 199, 0.15);
+  --accent: #10b981;
+  --danger: #f43f5e;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --text-dim: #64748b;
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
-    body {
-      background-color: var(--bg-dark);
-      color: var(--text-main);
-      font-family: var(--font-sans);
-      line-height: 1.6;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-
-    .ambient-glow {
-      position: fixed;
-      top: -220px;
-      right: -220px;
-      width: 750px;
-      height: 750px;
-      background: radial-gradient(circle, var(--primary-glow) 0%, transparent 70%);
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .ambient-glow-2 {
-      position: fixed;
-      bottom: -220px;
-      left: -220px;
-      width: 750px;
-      height: 750px;
-      background: radial-gradient(circle, var(--secondary-glow) 0%, transparent 70%);
-      pointer-events: none;
-      z-index: 0;
-    }
+body {
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
 
     header.navbar {
       position: sticky;
