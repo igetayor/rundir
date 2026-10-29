@@ -37,30 +37,21 @@ class IngestionService:
                 })
         return items
 
-    def dispatch_job(
+    async def dispatch_job(
         self,
         job_id: str,
         job_name: str,
-        sources: List[str],
+        sources: List[Any],
         concurrency: int,
         batch_size: int,
         mock_items: Optional[List[Any]],
-    ) -> IngestionJobResponse:
-        pipeline.run_ingestion_job(
+    ) -> None:
+        await pipeline.run_ingestion_job(
             job_id=job_id,
             sources=sources,
             concurrency=concurrency,
             batch_size=batch_size,
             mock_items=mock_items,
-        )
-        return IngestionJobResponse(
-            job_id=job_id,
-            job_name=job_name,
-            status="ACCEPTED",
-            sources_count=len(sources),
-            concurrency_limit=concurrency,
-            started_at=time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-            tracking_url="/api/v1/records",
         )
 
     async def list_records(self, limit: int, category: Optional[str]) -> List[Dict[str, Any]]:

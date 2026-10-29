@@ -187,14 +187,16 @@
         document.getElementById('job-preview').textContent = JSON.stringify(data, null, 2);
         showToast(`Job ${data.job_id} dispatched! Ingesting ${count} records...`);
 
-        // Poll for updates
+        // Poll for updates immediately and regularly
+        await fetchStats();
+        await fetchRecords();
         let pollCount = 0;
         const interval = setInterval(async () => {
           await fetchStats();
           await fetchRecords();
           pollCount++;
-          if (pollCount > 10) clearInterval(interval);
-        }, 800);
+          if (pollCount > 25) clearInterval(interval);
+        }, 400);
       } catch (err) {
         showToast(`Error: ${err.message}`);
       }
@@ -208,6 +210,10 @@
         document.getElementById('stat-inserted').textContent = stats.total_records_inserted.toLocaleString();
         document.getElementById('stat-rate').textContent = `${stats.ingestion_rate_rec_sec} rec/s`;
         document.getElementById('stat-quarantined').textContent = stats.total_records_quarantined;
+        const workersEl = document.getElementById('stat-workers');
+        if (workersEl) {
+          workersEl.textContent = stats.active_workers > 0 ? `${stats.active_workers} Active` : 'Idle (Ready)';
+        }
       } catch (err) {
         console.error(err);
       }
